@@ -4,12 +4,13 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-
-        DEPQ depq = new DEPQ(10);
-        for (int i = 0; i < 9; i++) {
-            int number = (int) (Math.random() * ((100 - 1) + 1)) + 1;
-            depq.add(number);
+        int arr[] = {10, 4, 8};
+        DEPQ depq = new DEPQ();
+        System.out.println("-------------------");
+        depq.heap = arr;
+        int[] builded = depq.build(depq.heap);
+        for (int i1 : builded) {
+            System.out.println(i1);
         }
-        depq.printHeap();
     }
 }
