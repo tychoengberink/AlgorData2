@@ -38,6 +38,9 @@ public class Main {
             }
             System.out.println();
         }
+
+        System.out.println("REMOVNG MIN");
+
         System.out.println(depq.findMinimum(depq.heap));
 
 
@@ -53,6 +56,7 @@ public class Main {
             }
             System.out.println();
         }
+        System.out.println("REMOVNG MAX");
         System.out.println(depq.findMaximum(depq.heap));
         depq.removeMaximum(depq.heap);
 
