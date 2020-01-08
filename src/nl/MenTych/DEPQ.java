@@ -134,11 +134,14 @@ class DEPQ {
             this.heap = null;
         } else if (heap.length >= 2) {
             int[] newheap;
-            swap(heap, getLargestChildOrGrandchild(heap, 0), heap.length - 1);
+            System.out.println(Arrays.toString(heap));
+            int largestindex = getLargestChildOrGrandchild(heap, 0);
+            System.out.println("LARGEST INDEX: " + getLargestChildOrGrandchild(heap, 0) + " is " + heap[getLargestChildOrGrandchild(heap, 0)]);
+            swap(heap, largestindex, heap.length - 1);
             newheap = Arrays.copyOf(heap, heap.length - 1);
 
             this.heap = newheap;
-            pushDown(this.heap, getLargestChildOrGrandchild(heap, 0));
+            pushDown(this.heap, largestindex);
         }
     }
 
@@ -183,30 +186,45 @@ class DEPQ {
 //                }
 //            }
 
+//OLD LargestChildOrGrandchild Function
+//    private int getLargestChildOrGrandchild(int[] heap, int i) {
+//            if(hasLeftChild(heap, i)){
+//                int indexleft = getLeftFromRoot(i);
+//                if(hasRightChild(heap, i)){
+//                    int indexright = getRightFromRoot(i);
+//                    if(heap[indexleft] > heap[indexright]){
+//                        return indexleft;
+//                    }else{
+//                        return indexright;
+//                    }
+//                }else{
+//                    return indexleft;
+//                }
+//            }
+//        return -1;
+//
+//    }
+
     private int getLargestChildOrGrandchild(int[] heap, int i) {
-            if(hasLeftChild(heap, i)){
-                int indexleft = getLeftFromRoot(i);
-                if(hasRightChild(heap, i)){
-                    int indexright = getRightFromRoot(i);
-                    if(heap[indexleft] > heap[indexright]){
-                        return indexleft;
-                    }else{
-                        return indexright;
-                    }
-                }else{
-                    return indexleft;
-                }
+        if (size() == 1) {
+            return 0;
+        } else if (size() == 2) {
+            return getLeftFromRoot(i);
+        } else {
+            if (heap[getLeftFromRoot(i)] < heap[getRightFromRoot(i)]) {
+                return getRightFromRoot(i);
+            } else {
+                return getLeftFromRoot(i);
             }
-        return -1;
-
+        }
     }
-
 
     private boolean hasChildren(int[] heap, int i) {
         return hasLeftChild(heap, i) || hasRightChild(heap, i);
     }
 
     private void pushDown(int[] heap, int index) {
+
         if (getLevel(index) == 0) {
             //Min
             pushDownMin(heap, index);
@@ -239,6 +257,11 @@ class DEPQ {
     private void pushDownMax(int[] heap, int index) {
         if (hasChildren(heap, index)) {
             int m = getLargestChildOrGrandchild(heap, index);
+            System.out.println("M: " + m);
+            System.out.println("M VALUE: " + heap[m]);
+            System.out.println("INDEX: " + index);
+            System.out.println("INDEX VALUE: " + heap[index]);
+
             if (isGrandChild(m + 1, index + 1)) {
                 if (heap[m] > heap[index]) {
                     swap(heap, m, index);
