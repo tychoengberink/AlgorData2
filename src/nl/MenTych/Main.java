@@ -4,8 +4,10 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-        int[] arr = {5, 1, 2, 50, 40, 20, 90};//works
-        //int[] arr = {5, 1, 2, 50, 40, 20, 30, 32};//works
+//        int[] arr = {16,11,10,31,46,51,31,21,13,71,41,8};//works
+//        int[] arr = {5, 1, 2, 50, 40, 20, 30, 32};//works
+        int[] arr = {5, 1, 2, 50, 40, 20, 30, 32, 91, 90};//works
+
 //        int[] arr = {5, 1, 2, 10, 20, 34, 3, 8, 6}; //works
         DEPQ depq = new DEPQ();
         System.out.println("-------------------");
@@ -24,13 +26,13 @@ public class Main {
         }
 
 //
-        depq.insert(depq.heap, 3);
-        depq.insert(depq.heap, 91);
+//        depq.insert(depq.heap, 3);
+//        depq.insert(depq.heap, 91);
         depq.insert(depq.heap, 60);
         depq.insert(depq.heap, 23);
         depq.insert(depq.heap, 66);
         depq.insert(depq.heap, 12);
-        depq.insert(depq.heap, 77);
+//        depq.insert(depq.heap, 77);
 
         for (int i = 0; i < depq.heap.length; i++) {
             System.out.print("index: " + i + " with value: " + depq.heap[i] + " ");
@@ -43,37 +45,50 @@ public class Main {
             System.out.println();
         }
 
-//        System.out.println("REMOVNG MIN");
+
+        System.out.println("REMOVNG MIN");
+
+        System.out.println(depq.findMinimum(depq.heap));
 //
-//        System.out.println(depq.findMinimum(depq.heap));
 //
+        depq.removeSmallest(depq.heap);
 //
-//        depq.removeSmallest(depq.heap);
-//
-//        for (int i = 0; i < depq.heap.length; i++) {
-//            System.out.print("index: " + i + " with value: " + depq.heap[i] + " ");
-//            if (depq.hasLeftChild(depq.heap, i)) {
-//                System.out.print(" LEFT CHILD " + depq.getLeftFromRoot(i) + " ");
-//            }
-//            if (depq.hasRightChild(depq.heap, i)) {
-//                System.out.print(" RIGHT CHILD " + depq.getRightFromRoot(i) + " ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println("REMOVNG MAX");
-//        System.out.println(depq.findMaximum(depq.heap));
-//        depq.removeMaximum(depq.heap);
-//
-//        for (int i = 0; i < depq.heap.length; i++) {
-//            System.out.print("index: " + i + " with value: " + depq.heap[i] + " ");
-//            if (depq.hasLeftChild(depq.heap, i)) {
-//                System.out.print(" LEFT CHILD " + depq.getLeftFromRoot(i) + " ");
-//            }
-//            if (depq.hasRightChild(depq.heap, i)) {
-//                System.out.print(" RIGHT CHILD " + depq.getRightFromRoot(i) + " ");
-//            }
-//            System.out.println();
-//        }
-//    }
+        for (int i = 0; i < depq.heap.length; i++) {
+            System.out.print("index: " + i + " with value: " + depq.heap[i] + " ");
+            if (depq.hasLeftChild(depq.heap, i)) {
+                System.out.print(" LEFT CHILD " + depq.getLeftFromRoot(i) + " ");
+            }
+            if (depq.hasRightChild(depq.heap, i)) {
+                System.out.print(" RIGHT CHILD " + depq.getRightFromRoot(i) + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("REMOVNG MAX");
+        System.out.println(depq.findMaximum(depq.heap));
+        depq.removeMaximum(depq.heap);
+
+        for (int i = 0; i < depq.heap.length; i++) {
+            System.out.print("index: " + i + " with value: " + depq.heap[i] + " ");
+            if (depq.hasLeftChild(depq.heap, i)) {
+                System.out.print(" LEFT CHILD " + depq.getLeftFromRoot(i) + " ");
+            }
+            if (depq.hasRightChild(depq.heap, i)) {
+                System.out.print(" RIGHT CHILD " + depq.getRightFromRoot(i) + " ");
+            }
+            System.out.println();
+        }
+
+        depq.build(depq.heap);
+
+        for (int i = 0; i < depq.heap.length; i++) {
+            System.out.print("index: " + i + " with value: " + depq.heap[i] + " ");
+            if (depq.hasLeftChild(depq.heap, i)) {
+                System.out.print(" LEFT CHILD " + depq.getLeftFromRoot(i) + " ");
+            }
+            if (depq.hasRightChild(depq.heap, i)) {
+                System.out.print(" RIGHT CHILD " + depq.getRightFromRoot(i) + " ");
+            }
+            System.out.println();
+        }
     }
 }
