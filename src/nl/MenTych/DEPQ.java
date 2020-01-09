@@ -8,18 +8,7 @@ class DEPQ {
 
     public int[] heap;
 
-    //Probably not needed anymore see get level
-//    private boolean isMinLayer(int[] heap, int i) {
-//        if (getParentFromCurrentElement(i) != -1) {
-//            System.out.println(heap[getParentFromCurrentElement(i)]);
-//            System.out.println(heap[i]);
-//        }
-//        if (i == 0) {
-//            return true;
-//        }else return heap[getParentFromCurrentElement(i)] > heap[i];
-//
-//    }
-
+    //WORKS!
     private int getLevel(int i) {
         if (i == 0) {
             return 0;
@@ -28,17 +17,19 @@ class DEPQ {
         return (int) (log(i + 1) / log(2));
     }
 
+    //WORKS!
     private void swap(int[] heap, int m, int i) {
         int temp = heap[m];
         heap[m] = heap[i];
         heap[i] = temp;
-        System.out.println("SWAPPING " + m + " AND " + i);
     }
 
+    //WORKS!
     private int getGrandParent(int i) {
         return getParentFromCurrentElement(getParentFromCurrentElement(i));
     }
 
+    //WORKS!
     private int getParentFromCurrentElement(int i) {
         if (i == 0) {
             return -1;
@@ -46,28 +37,43 @@ class DEPQ {
         return (i - 1) / 2;
     }
 
+    //WORKS!
     int getLeftFromRoot(int i) {
         return (2 * i + 1);
     }
 
+    //WORKS!
     int getRightFromRoot(int i) {
         return (2 * i + 2);
     }
 
-    boolean hasLeftChild(int[] heap, int i) {
-        return getLeftFromRoot(i) < size();
+    //WORKS!
+    boolean hasLeftChild(int i) {
+        return getLeftFromRoot(i) < size() - 1;
     }
 
-    boolean hasRightChild(int[] heap, int i) {
-        return getRightFromRoot(i) < size();
+    //WORKS!
+    boolean hasRightChild(int i) {
+        return getRightFromRoot(i) < size() - 1;
     }
 
+    //WORKS!
+    //TODO: SMALLER?
     private boolean isGrandChild(int m, int i) {
         i++;
-        if (m == 0 || m == 1 || m == 2) return false;
-        return getParentFromCurrentElement(getParentFromCurrentElement(m)) == i;
+        int leftindex = getLeftFromRoot(m);
+        int rightindex = getRightFromRoot(m);
+
+        if (i == getLeftFromRoot(leftindex)) return true;
+        if (i == getLeftFromRoot(rightindex)) return true;
+        if (i == getRightFromRoot(leftindex)) return true;
+        return i == getRightFromRoot(rightindex);
+
+//        if (m == 0 || m == 1 || m == 2) return false;
+//        return getParentFromCurrentElement(getParentFromCurrentElement(m)) == i;
     }
 
+    //WORKS!
     private boolean hasGrandParent(int i) {
         int parent = getParentFromCurrentElement(i);
         return getParentFromCurrentElement(parent) != -1;
@@ -81,7 +87,7 @@ class DEPQ {
     }
 
     private int size() {
-        return heap.length;
+        return this.heap.length;
     }
 
     int findMinimum(int[] heap) {
@@ -93,6 +99,7 @@ class DEPQ {
 
     }
 
+    //WORKS!
     int findMaximum(int[] heap) {
         if (isEmpty()) {
             throw new RuntimeException("Heap is empty");
@@ -109,6 +116,7 @@ class DEPQ {
         }
     }
 
+    //WORKS!
     int findMaximumIndex(int[] heap) {
         if (isEmpty()) {
             throw new RuntimeException("Heap is empty");
@@ -125,14 +133,15 @@ class DEPQ {
         }
     }
 
-    void removeSmallest(int[] heap) {
+    //WORKS!
+    int removeSmallest(int[] heap) {
         if (isEmpty()) {
             throw new RuntimeException("Heap is empty");
         }
 
+        int smallestval = heap[0];
         if (heap.length >= 2) {
             int[] newheap;
-
             swap(heap, 0, heap.length - 1);
             newheap = Arrays.copyOf(heap, heap.length - 1);
 
@@ -140,45 +149,54 @@ class DEPQ {
             pushDown(this.heap, 0);
         } else {
             this.heap = null;
+
         }
+        return smallestval;
     }
 
-    void removeMaximum(int[] heap) {
+    //TODO: DOESNT WORK!
+    int removeMaximum(int[] heap) {
         if (isEmpty()) {
             throw new RuntimeException("Heap is empty");
         }
+        int[] newheap;
+        int largestindex;
 
         if (heap.length == 1) {
-            this.heap = null;
-        } else if (heap.length >= 2) {
-            int[] newheap;
-            int largestindex = findMaximumIndex(heap);
-            System.out.println("LARGEST INDEX: " + largestindex + " is " + heap[largestindex]);
-            swap(heap, largestindex, heap.length - 1);
-            newheap = Arrays.copyOf(heap, heap.length - 1);
-
-            this.heap = newheap;
-            pushDown(this.heap, largestindex);
+            largestindex = 0;
+        } else if (heap.length == 2) {
+            largestindex = 1;
+        } else {
+            largestindex = findMaximumIndex(heap);
         }
+        int biggestval = heap[largestindex];
+        System.out.println("LARGEST INDEX: " + largestindex + " is " + heap[largestindex]);
+        swap(heap, largestindex, heap.length - 1);
+        newheap = Arrays.copyOf(heap, heap.length - 1);
+        this.heap = newheap;
+        pushDown(this.heap, largestindex);
+        return biggestval;
     }
 
-
+    //WORKS!
     int[] build(int[] heap) {
-        for (int i = 0; i < (size() /2); i++) {
+        for (int i = 0; i < (size() / 2); i++) {
             pushDown(heap, i);
 
         }
         return heap;
     }
 
+    //WORKS!
     private int getSmallestChildOrGrandchild(int[] heap, int i) {
         //All the possible positions of smaller elements
         int[] positisions = new int[]{i * 2 + 2, i * 4 + 3, i * 4 + 4, i * 4 + 5, i * 4 + 6};
         System.out.println(Arrays.toString(positisions));
-        if (hasLeftChild(heap, i)) {
+        if (hasLeftChild(i)) {
             int smallestindex = i * 2 + 1;
             for (int positision : positisions) {
-                if (size() > positision) {
+                System.out.println("SIZE: " + size() + "POS: " + positision);
+                if (size() - 1 > positision) {
                     if (heap[positision] < heap[smallestindex]) {
                         smallestindex = positision;
                     }
@@ -189,13 +207,15 @@ class DEPQ {
         return -1;
     }
 
+    //WORKS!
     private int getLargestChildOrGrandchild(int[] heap, int i) {
         //All the possible positions of bigger elements
         int[] positisions = new int[]{i * 2 + 2, i * 4 + 3, i * 4 + 4, i * 4 + 5, i * 4 + 6};
-        if (hasLeftChild(heap, i)) {
+        if (hasLeftChild(i)) {
             int biggest = i * 2 + 1;
             for (int positision : positisions) {
-                if (size() > positision) {
+                System.out.println("SIZE: " + size() + "POS: " + positision);
+                if (size() - 1 > positision) {
                     if (heap[positision] > heap[biggest]) {
                         biggest = positision;
                     }
@@ -206,12 +226,14 @@ class DEPQ {
         return -1;
     }
 
+    //WORKS!
     private boolean hasChildren(int[] heap, int i) {
-        return hasLeftChild(heap, i) || hasRightChild(heap, i);
+        return hasLeftChild(i) || hasRightChild(i);
     }
 
+    //WORKS!
     private void pushDown(int[] heap, int index) {
-        System.out.println("PUSHING DOWN: " + index + " WITH VAL: " + heap[index]);
+
         if (getLevel(index) == 0) {
             //Min
             pushDownMin(heap, index);
@@ -219,13 +241,14 @@ class DEPQ {
             //Min
             pushDownMin(heap, index);
         } else {
-            System.out.println("ON MAX LEVEL");
             //Max
             pushDownMax(heap, index);
         }
     }
 
+    //WORKS!
     private void pushDownMin(int[] heap, int index) {
+        System.out.println("PUSHING DOWN MIN: " + index + " WITH VAL: " + heap[index]);
         if (hasChildren(heap, index)) {
             int m = getSmallestChildOrGrandchild(heap, index);
             if (isGrandChild(m, index)) {
@@ -242,12 +265,14 @@ class DEPQ {
         }
     }
 
+    //WORKS!
     private void pushDownMax(int[] heap, int index) {
+        System.out.println("PUSHING DOWN MAX: " + index + " WITH VAL: " + heap[index]);
         if (hasChildren(heap, index)) {
             int m = getLargestChildOrGrandchild(heap, index);
             System.out.println(heap[m]);
             System.out.println(heap[index]);
-            System.out.println("INDEX M " + m);
+            System.out.println("LARGEST INDEX M " + m);
             System.out.println((heap[m] > heap[index]));
             if (isGrandChild(m, index)) {
                 if (heap[m] > heap[index]) {
@@ -263,16 +288,16 @@ class DEPQ {
         }
     }
 
+    //WORKS!
     void insert(int[] heap, int value) {
         int[] newheap = new int[heap.length + 1];
-        for (int i = 0; i < heap.length; i++) {
-            newheap[i] = heap[i];
-        }
+        System.arraycopy(heap, 0, newheap, 0, heap.length);
         newheap[heap.length] = value;
         this.heap = newheap;
         pushUp(this.heap, heap.length);
     }
 
+    //WORKS!
     private void pushUp(int[] heap, int index) {
 
         if (index > 0) {
@@ -303,6 +328,7 @@ class DEPQ {
         }
     }
 
+    //WORKS!
     private void pushUpMin(int[] heap, int index) {
         System.out.println("HAS A GRANDPARENT: " + hasGrandParent(index));
         if (hasGrandParent(index) && heap[index] < heap[getGrandParent(index)]) {
@@ -313,6 +339,7 @@ class DEPQ {
         }
     }
 
+    //WORKS!
     private void pushUpMax(int[] heap, int index) {
         System.out.println("HAS A GRANDPARENT: " + hasGrandParent(index));
         if (hasGrandParent(index) && heap[index] > heap[getGrandParent(index)]) {
@@ -323,4 +350,17 @@ class DEPQ {
         }
     }
 
+    //WORKS!
+    void printHeap(int[] heap) {
+        for (int i = 0; i < heap.length; i++) {
+            System.out.print("index: " + i + " with value: " + heap[i] + " ");
+            if (hasLeftChild(i)) {
+                System.out.print(" LEFT CHILD " + getLeftFromRoot(i) + " ");
+            }
+            if (hasRightChild(i)) {
+                System.out.print(" RIGHT CHILD " + getRightFromRoot(i) + " ");
+            }
+            System.out.println();
+        }
+    }
 }
