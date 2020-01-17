@@ -47,7 +47,8 @@ class DEPQ {
     }
 
     /**
-     * returns the grandparent of the current element.
+     * returns the grandparent of the current index.
+     *
      * @param i the index to check
      * @return int the index of the grandparent.
      */
@@ -56,7 +57,11 @@ class DEPQ {
     }
 
     /**
-     * returns the parent fo
+     * returns the parent of the current index
+     *
+     * if the index is 0 the returned value will be -1
+     *
+     *
      * @param i
      * @return
      */
@@ -160,7 +165,7 @@ class DEPQ {
      * Find minimum int in the heap and return it
      *
      * @param heap the heap
-     * @return int the minimum of the heap
+     * @return int the minimum value of the heap
      */
     int findMinimum(int[] heap) {
         if (isEmpty()) {
@@ -171,10 +176,10 @@ class DEPQ {
 
 
     /**
-     * Find maximum int.
+     * Find maximum int in hte heap and return it
      *
      * @param heap the heap
-     * @return the int
+     * @return int the maximum value of the heap.
      */
     int findMaximum(int[] heap) {
         if (isEmpty()) {
@@ -194,10 +199,10 @@ class DEPQ {
 
 
     /**
-     * Find maximum index int.
+     * Find maximum index int and return it.
      *
      * @param heap the heap
-     * @return the int
+     * @return the int of the max index
      */
     int findMaximumIndex(int[] heap) {
         if (isEmpty()) {
@@ -217,10 +222,11 @@ class DEPQ {
 
 
     /**
-     * Remove smallest int.
+     * Remove minimum int value, return it and restore the heap.
+     * See https://en.wikipedia.org/wiki/Min-max_heap for the psuedocode
      *
      * @param heap the heap
-     * @return the int
+     * @return the int value of the removed minimum
      */
     int removeSmallest(int[] heap) {
         if (isEmpty()) {
@@ -239,12 +245,12 @@ class DEPQ {
     }
 
     /**
-     * Remove maximum int.
+     * Remove maximum int value, return it and restore the heap.
+     * See https://en.wikipedia.org/wiki/Min-max_heap for the psuedocode
      *
      * @param heap the heap
-     * @return the int
+     * @return the int value of the removed maximum
      */
-//WORKS
     int removeMaximum(int[] heap) {
         if (isEmpty()) {
             throw new RuntimeException("Heap is empty");
@@ -269,10 +275,10 @@ class DEPQ {
 
 
     /**
-     * Build int [ ].
+     * Build the heap respectively according the pushdown algorithm
      *
      * @param heap the heap
-     * @return the int [ ]
+     * @return the builded int array.
      */
     int[] build(int[] heap) {
         for (int i = 0; i < (size() / 2); i++) {
@@ -282,7 +288,13 @@ class DEPQ {
         return heap;
     }
 
-
+    /**
+     * return the smallest child or grandchild of the current index.
+     *
+     * @param heap
+     * @param i    the index to check
+     * @return the index of the place with the lowest value.
+     */
     private int getSmallestChildOrGrandchild(int[] heap, int i) {
         //All the possible positions of smaller elements
         int[] positisions = new int[]{i * 2 + 2, i * 4 + 3, i * 4 + 4, i * 4 + 5, i * 4 + 6};
@@ -300,7 +312,13 @@ class DEPQ {
         return -1;
     }
 
-
+    /**
+     * return the largest child or grandchild of the current index.
+     *
+     * @param heap
+     * @param i    the index to check
+     * @return the index of the place with the highest value.
+     */
     private int getLargestChildOrGrandchild(int[] heap, int i) {
         //All the possible positions of bigger elements
         int[] positisions = new int[]{i * 2 + 2, i * 4 + 3, i * 4 + 4, i * 4 + 5, i * 4 + 6};
@@ -318,12 +336,22 @@ class DEPQ {
         return -1;
     }
 
-
+    /**
+     * check is the current index has children.
+     *
+     * @param i the index to check
+     * @return boolean has children or not.
+     */
     private boolean hasChildren(int i) {
         return hasLeftChild(i) || hasRightChild(i);
     }
 
-
+    /**
+     * checks if the current value is a min or a max and reacts accordingly
+     *
+     * @param heap
+     * @param index the index to check.
+     */
     private void pushDown(int[] heap, int index) {
 
         if (getLevel(index) == 0) {
@@ -338,7 +366,13 @@ class DEPQ {
         }
     }
 
-
+    /**
+     * the algorithm that is used to restore the heap during building. Also called tricledownMin
+     * See https://en.wikipedia.org/wiki/Min-max_heap for the psuedocode
+     *
+     * @param heap
+     * @param index
+     */
     private void pushDownMin(int[] heap, int index) {
         if (hasChildren(index)) {
             int m = getSmallestChildOrGrandchild(heap, index);
@@ -356,7 +390,13 @@ class DEPQ {
         }
     }
 
-
+    /**
+     * the algorithm that is used to restore the heap during building. Also called tricledownMax
+     * See https://en.wikipedia.org/wiki/Min-max_heap for the psuedocode
+     *
+     * @param heap
+     * @param index
+     */
     private void pushDownMax(int[] heap, int index) {
         if (hasChildren(index)) {
             int m = getLargestChildOrGrandchild(heap, index);
@@ -376,10 +416,10 @@ class DEPQ {
 
 
     /**
-     * Insert.
+     * Insert the value into the heap and restore the heap using pushUp (bubbleup)
      *
      * @param heap  the heap
-     * @param value the value
+     * @param value the value to insert.
      */
     void insert(int[] heap, int value) {
         int[] newheap = new int[heap.length + 1];
@@ -389,7 +429,13 @@ class DEPQ {
         pushUp(this.heap, heap.length);
     }
 
-
+    /**
+     * the algortihm that is used to restore the heap during insertions
+     * See https://en.wikipedia.org/wiki/Min-max_heap for the psuedocode
+     *
+     * @param heap
+     * @param index index to pushup
+     */
     private void pushUp(int[] heap, int index) {
 
         if (index > 0) {
@@ -413,7 +459,13 @@ class DEPQ {
         }
     }
 
-
+    /**
+     * the algorithm that is used to restore the heap during insertions (bubbleupMin)
+     * See https://en.wikipedia.org/wiki/Min-max_heap for the psuedocode
+     *
+     * @param heap
+     * @param index the index to be pushed up.
+     */
     private void pushUpMin(int[] heap, int index) {
         if (hasGrandParent(index) && heap[index] < heap[getGrandParent(index)]) {
             swap(heap, index, getGrandParent(index));
@@ -421,7 +473,13 @@ class DEPQ {
         }
     }
 
-
+    /**
+     * the algorithm that is used to restore the heap during insertions (bubbleupMax)
+     * See https://en.wikipedia.org/wiki/Min-max_heap for the psuedocode
+     *
+     * @param heap
+     * @param index the index to be pushed up.
+     */
     private void pushUpMax(int[] heap, int index) {
         if (hasGrandParent(index) && heap[index] > heap[getGrandParent(index)]) {
             swap(heap, index, getGrandParent(index));
@@ -431,7 +489,8 @@ class DEPQ {
 
 
     /**
-     * Print heap.
+     * Print the heap.
+     *
      *
      * @param heap the heap
      */
@@ -446,6 +505,7 @@ class DEPQ {
             }
             System.out.println();
         }
+        System.out.println("-------------------");
     }
 
 
